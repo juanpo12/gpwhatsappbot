@@ -51,10 +51,11 @@ export const formatMessage = (message: string, user: User) => {
   let formattedMessage = message.replace(/-/g, ' ');
 
   if (!isValid) {
-    formattedMessage += ` Mensaje no enviado a: ${user.full_name} con numero de telefono ${cleanedPhoneNumber}.
-    ${user.instagram ? `Instagram: ${user.instagram}` : ''},
-    Nombre completo: ${user.full_name},
-    Celular: ${user.celular}`;
+    formattedMessage += ` 
+  Mensaje no enviado a: ${user.full_name} con numero de telefono ${cleanedPhoneNumber}.
+  ${user.instagram ? `Instagram: ${user.instagram},` : ''}
+  Nombre completo: ${user.full_name},
+  Celular: ${user.celular}`;
   }
 
   return { formattedMessage, cleanedPhoneNumber };

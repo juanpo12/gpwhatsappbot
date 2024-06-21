@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     if(userData){
       const { cleanedPhoneNumber, formattedMessage } = formatMessage(message, userData);
 
-      const result = await sendMessage(client, cleanedPhoneNumber as string, formattedMessage);
+      const result = await sendMessage(client, cleanedPhoneNumber, formattedMessage);
 
       return res.status(200).send(result);
     }
