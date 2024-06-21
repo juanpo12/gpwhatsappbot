@@ -37,6 +37,7 @@ const startServer = (port: number) => app.listen(port, () => {
   if (err.code === 'EADDRINUSE') {
     console.log('Address in use, retrying...');
     setTimeout(() => {
+      port += 1;
       startServer(port);
     }, 1000);
   }
