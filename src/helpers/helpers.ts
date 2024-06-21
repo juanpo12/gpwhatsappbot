@@ -62,7 +62,8 @@ export const formatMessage = (message: string, user: User) => {
 };
 
 export const sendMessage = async (client: Client, phoneNumber: string , message: string ) => {
-  const formattedPhoneNumber = `${phoneNumber.trim()}@c.us`;
+  const cleanedNumber = phoneNumber.startsWith('+') ? phoneNumber.slice(1) : phoneNumber;
+  const formattedPhoneNumber = `${cleanedNumber.trim()}@c.us`;
   
   try {
     await client.sendMessage(formattedPhoneNumber, message);
