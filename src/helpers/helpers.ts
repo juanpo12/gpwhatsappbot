@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-len */
-import { Client } from 'whatsapp-web.js';
+import { Client, MessageMedia } from 'whatsapp-web.js';
 import { URL } from '../constants/URL';
 import { cleanAndFormatPhoneNumber } from './cleanAndFormatPhoneNumber';
 import { FALLBACK_PHONE_NUMBER } from '@src/constants/numbers';
@@ -68,8 +68,35 @@ export const sendMessage = async (client: Client, phoneNumber: string , message:
     await client.sendMessage(formattedPhoneNumber, message);
     return { status: 'success', message: 'Message sent successfully' };
   } catch (error) {
-    console.error('Error sending message:', error);
     const errorDetails = error.response ? error.response.data : { to: phoneNumber, text: error.message };
     throw new Error(`Error sending message: ${JSON.stringify(errorDetails)}`);
+  }
+};
+
+export const sendImageAndMessage = async (
+  client: Client, 
+  phoneNumber: string,  
+  imagePath: string, 
+  imageName: string, 
+  message: string,
+) => {
+  try {
+    if(!phoneNumber || !message || !imagePath || !imageName) {
+      throw new Error('Phone number, message, image path and name are required');
+    }
+    const { cleanedPhoneNumber } = cleanAndFormatPhoneNumber(phoneNumber);
+    const formattedPhoneNumber = `${cleanedPhoneNumber}@c.us`;
+
+    const media = await MessageMedia.fromUrl(imagePath, {unsafeMime: true});
+    const contact = await client.getContactById(formattedPhoneNumber);
+    const chat = await contact.getChat();
+
+    await chat.sendMessage(media, { caption: message });
+
+    return { status: 'success', message: 'Message sent successfully' };
+
+  } catch (error) {
+    const errorDetails = error.response ? error.response.data : { to: phoneNumber, text: error.message };
+    throw new Error(`Error sending image: ${JSON.stringify(errorDetails)}`);
   }
 };

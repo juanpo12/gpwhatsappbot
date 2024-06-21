@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 import { Client, LocalAuth } from 'whatsapp-web.js';
 import qrTerminal from 'qrcode-terminal';

@@ -4,3 +4,10 @@ export interface SystemError extends Error {
     syscall?: string;
     path?: string;
 }
+
+export type Participant = {
+    name: string;
+    phone: string;
+    image: string;
+    rank: number;
+}
