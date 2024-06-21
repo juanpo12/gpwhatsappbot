@@ -17,13 +17,6 @@ import pendingRoute from './routes/pending';
 // import followupRoute from './routes/followup';
 // import receiveImageAndJSONRoute from './routes/receiveImageAndJSON';
 
-
-client.on('ready', () => {
-  console.log('Client is ready!');
-});
-
-app.use('/send-message', sendMessageRoute);
-app.use('/pending', pendingRoute);
 // app.use('/followup', followupRoute);
 // app.use('/receive-image-and-json', receiveImageAndJSONRoute);
 // const client = new Client({
@@ -32,9 +25,14 @@ app.use('/pending', pendingRoute);
 //     headless: true,
 //   },
 // });
-
+    
 client.on('ready', () => {
+  app.use('/send-message', sendMessageRoute);
+  app.use('/pending', pendingRoute);
   console.log('Client is ready!');
+});
+client.on('error', (error) => {
+  console.log(error);
 });
 
 const port = 5000;
