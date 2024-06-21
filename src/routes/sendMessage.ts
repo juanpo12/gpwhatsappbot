@@ -50,9 +50,13 @@ router.post('/', async (req, res) => {
 
     throw new Error('User not found');
         
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error while processing message:', error);
-    return res.status(500).send({ error: 'Error while processing message' });
+    if(error instanceof Error) {
+      return res.status(500).send({ error: 'Error while processing message', message: error.message });
+    } else {
+      return res.status(500).send({ error: 'Error while processing message' });
+    }
   }
 });
 
