@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-len */
 import express from 'express';
-import { fetchUserData, formatMessage, getCurrentClient, sendMessage } from '../helpers/helpers';
+import { fetchUserData, formatMessage, sendMessage } from '../helpers/helpers';
+import { client } from '@src/config/whatsAppClient';
 
 const router = express.Router();
 
@@ -10,25 +11,40 @@ router.post('/', async (req, res) => {
   try {
     const { discorduserid, phoneNumber, message } = req.body;
 
-    if(!discorduserid || !phoneNumber || !message) {
-      return res.status(400).send({ error: 'Missing parameters' });
+    if(!message || (!discorduserid && !phoneNumber)) {
+      return res.status(400).send({ error: 'Missing parameters. Message, phone number and discord user id are required' });
     }
 
-    const client = await getCurrentClient();
-
-    let user, finalPhoneNumber = phoneNumber;
-
-    if(discorduserid){
-      user = await fetchUserData(discorduserid as string);
-      finalPhoneNumber = user.celular;
-    }
-
-    if(finalPhoneNumber){
+    if(typeof discorduserid === 'string' && discorduserid.length > 0 || typeof discorduserid === 'number' && discorduserid > 0) {
+      const user = await fetchUserData(discorduserid as string);
+      if(user.celular){
+        const { cleanedPhoneNumber, formattedMessage } = formatMessage(
+          message as string, user || { firstName: '' },
+        );
+  
+        await sendMessage(client, cleanedPhoneNumber, formattedMessage);
+        return res.send({ message: 'Message sent successfully' });
+      }
+    } else if (phoneNumber) {
+      console.log('falling back to phone number')
       const { cleanedPhoneNumber, formattedMessage } = formatMessage(
-        message as string, user || { firstName: '' },
+        message as string,
+        {
+          full_name: '', celular: phoneNumber,
+          user_id: 0,
+          username: '',
+          nickname: '',
+          email: '',
+          user_discord_id: '',
+          youtube_id: '',
+          individualID: 0,
+          individual_id: 0,
+          SubmissionId: 0,
+          instagram: '',
+        },
       );
-
-      await sendMessage(client, cleanedPhoneNumber as string, formattedMessage);
+  
+      await sendMessage(client, cleanedPhoneNumber, formattedMessage);
       return res.send({ message: 'Message sent successfully' });
     }
 
