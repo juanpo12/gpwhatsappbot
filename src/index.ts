@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable node/no-extraneous-import */
+// eslint-disable-next-line node/no-extraneous-import
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
@@ -14,22 +13,17 @@ app.use(cors());
 
 import sendMessageRoute from './routes/sendMessage';
 import pendingRoute from './routes/pending';
-// import followupRoute from './routes/followup';
-// import receiveImageAndJSONRoute from './routes/receiveImageAndJSON';
-
-// app.use('/followup', followupRoute);
-// app.use('/receive-image-and-json', receiveImageAndJSONRoute);
-// const client = new Client({
-//   authStrategy: new LocalAuth(),
-//   puppeteer: {
-//     headless: true,
-//   },
-// });
+import followupRoute from './routes/followUp';
+import receiveImageAndJSONRoute from './routes/receiveImageAndJson';
+import confirmationRoute from './routes/confirmation';
     
 client.on('ready', () => {
   app.use('/send-message', sendMessageRoute);
   app.use('/pending', pendingRoute);
-  console.log('Client is ready!');
+  app.use('/followup', followupRoute);
+  app.use('/receive-image-and-json', receiveImageAndJSONRoute);
+  app.use('/confirmation', confirmationRoute);
+  console.log('Client is ready! Endpoints available: /send-message, /pending, /followup, /receive-image-and-json');
 });
 client.on('error', (error) => {
   console.log(error);

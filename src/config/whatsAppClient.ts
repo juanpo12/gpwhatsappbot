@@ -25,10 +25,6 @@ client.on('qr', (qr) => {
 
 client.initialize();
 
-client.on('ready', () => {
-  console.log('Client is ready!');
-});
-
 client.on('message', async (message) => {
   const isGroup = await message.getChat().then((chat) => chat.isGroup);
   console.log('ISGROUP', isGroup);

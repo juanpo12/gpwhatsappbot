@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    const { participant }: { participant: Participant } = req.body as { participant: Participant };
+    const { participant } = req.body as { participant: Participant };
 
     if(!participant) {
       return res.status(400).send({ error: 'Missing parameters' });
@@ -30,3 +30,5 @@ router.post('/', async (req, res) => {
     res.status(500).send({ error: 'Error sending image' });
   }
 });
+
+export default router;

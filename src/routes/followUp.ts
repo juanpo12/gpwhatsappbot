@@ -35,3 +35,5 @@ router.get('/', async (req, res) => {
     res.status(500).send({ error: 'Error retrieving follow-up data' });
   }
 });
+
+export default router;

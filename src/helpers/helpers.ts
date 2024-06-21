@@ -100,3 +100,14 @@ export const sendImageAndMessage = async (
     throw new Error(`Error sending image: ${JSON.stringify(errorDetails)}`);
   }
 };
+
+export const sendErrorMessage = async (client: Client, message: string) => {
+  const formattedNumber = `${FALLBACK_PHONE_NUMBER}@c.us`;
+  try {
+    await client.sendMessage(formattedNumber, message);
+    return { status: 'success', message: 'Message sent successfully' };
+  } catch (error) {
+    const errorDetails = error.response ? error.response.data : { to: FALLBACK_PHONE_NUMBER, text: error.message };
+    throw new Error(`Error sending message: ${JSON.stringify(errorDetails)}`);
+  }
+};
